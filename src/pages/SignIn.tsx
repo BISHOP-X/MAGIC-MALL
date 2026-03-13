@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Shield, Zap, Star, ArrowLeft, AlertCircle } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Shield, Zap, Star, ArrowLeft, AlertCircle, Sun, Moon } from 'lucide-react'
 import Logo from '../components/Logo'
 import { useAuth } from '../hooks/useAuth'
+import { useTheme } from '../hooks/useTheme'
 
 const stats = [
   { icon: Shield, label: 'Secure Payments', value: '256-bit SSL' },
-  { icon: Zap, label: 'Instant Delivery', value: '<5 min' },
-  { icon: Star, label: 'Customer Rating', value: '4.9 / 5' },
+  { icon: Zap,    label: 'Instant Delivery', value: '<5 min' },
+  { icon: Star,   label: 'Customer Rating',  value: '4.9 / 5' },
 ]
 
 export default function SignIn() {
@@ -17,6 +18,7 @@ export default function SignIn() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const { signIn, signInWithGoogle, user, loading: authLoading } = useAuth()
+  const { dark, toggle } = useTheme()
 
   useEffect(() => {
     if (!authLoading && user) navigate('/dashboard', { replace: true })
@@ -24,7 +26,7 @@ export default function SignIn() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d0d14' }}>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0d0d14]">
         <div className="w-8 h-8 border-[3px] border-red-600 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -53,116 +55,115 @@ export default function SignIn() {
     if (oauthError) setError(oauthError.message)
   }
 
+  /* ─── Theme-conditional values ─── */
+  const pageBg = dark
+    ? 'radial-gradient(ellipse at 20% 10%, rgba(220,38,38,0.22) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.18) 0%, transparent 55%), #0d0d14'
+    : 'radial-gradient(ellipse at 20% 10%, rgba(220,38,38,0.07) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.05) 0%, transparent 55%), #f5f5f8'
+
+  const inputBg     = dark ? 'rgba(255,255,255,0.07)' : '#ffffff'
+  const inputBorder = dark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.15)'
+
+  const cardStyle = dark
+    ? { background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.10)' }
+    : { background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 8px 40px -8px rgba(0,0,0,0.12)' }
+
+  const backBtnStyle = dark
+    ? { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.12)' }
+    : { background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(0,0,0,0.10)', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }
+
+  const toggleBtnStyle = dark
+    ? { background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.12)' }
+    : { background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(0,0,0,0.10)', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }
+
+  const dividerColor = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'
+  const muted        = dark ? 'rgba(255,255,255,0.30)' : '#9ca3af'
+
   return (
     <div
-      className="min-h-screen flex items-center justify-center text-white relative overflow-hidden p-4 sm:p-6"
-      style={{
-        background:
-          'radial-gradient(ellipse at 20% 10%, rgba(220,38,38,0.22) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.18) 0%, transparent 55%), #0d0d14',
-      }}
+      className="min-h-screen flex items-start sm:items-center justify-center relative overflow-x-hidden overflow-y-auto px-4 pt-20 pb-8 sm:py-8 sm:px-6 transition-colors duration-300"
+      style={{ background: pageBg, color: dark ? '#ffffff' : '#111827' }}
     >
       {/* Decorative blobs */}
-      <div
-        className="fixed pointer-events-none"
-        style={{
-          top: '-100px', left: '-100px', width: '400px', height: '400px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(220,38,38,0.15) 0%, transparent 70%)',
-          filter: 'blur(50px)', zIndex: 0,
-        }}
-      />
-      <div
-        className="fixed pointer-events-none"
-        style={{
-          bottom: '-80px', right: '-80px', width: '350px', height: '350px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(244,63,94,0.12) 0%, transparent 70%)',
-          filter: 'blur(45px)', zIndex: 0,
-        }}
-      />
+      <div className="fixed pointer-events-none" style={{ top: '-100px', left: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: `radial-gradient(circle, ${dark ? 'rgba(220,38,38,0.15)' : 'rgba(220,38,38,0.06)'} 0%, transparent 70%)`, filter: 'blur(50px)', zIndex: 0 }} />
+      <div className="fixed pointer-events-none" style={{ bottom: '-80px', right: '-80px', width: '350px', height: '350px', borderRadius: '50%', background: `radial-gradient(circle, ${dark ? 'rgba(244,63,94,0.12)' : 'rgba(244,63,94,0.05)'} 0%, transparent 70%)`, filter: 'blur(45px)', zIndex: 0 }} />
 
       {/* Back button */}
       <Link
         to="/"
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-white/70 hover:text-white transition-all"
-        style={{
-          background: 'rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255,255,255,0.12)',
-        }}
+        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all"
+        style={{ ...backBtnStyle, color: dark ? 'rgba(255,255,255,0.70)' : '#4b5563' }}
       >
         <ArrowLeft size={15} />
         <span className="hidden sm:inline">Home</span>
       </Link>
 
-      {/* Glass card */}
-      <div
-        className="relative z-10 w-full max-w-[420px] rounded-2xl p-7 sm:p-9 auth-slide-up"
-        style={{
-          background: 'rgba(255,255,255,0.06)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255,255,255,0.10)',
-        }}
+      {/* Theme toggle */}
+      <button
+        onClick={toggle}
+        aria-label="Toggle theme"
+        className="fixed top-4 right-4 z-50 p-2.5 rounded-full transition-all duration-300 hover:rotate-12"
+        style={{ ...toggleBtnStyle, color: dark ? 'rgba(255,255,255,0.60)' : '#6b7280' }}
       >
+        <span className="theme-icon">{dark ? <Sun size={16} /> : <Moon size={16} />}</span>
+      </button>
+
+      {/* Glass card */}
+      <div className="relative z-10 w-full max-w-[420px] rounded-2xl p-5 sm:p-9 auth-slide-up" style={cardStyle}>
         {/* Logo */}
-        <div className="flex justify-center mb-7">
-          <Link to="/"><Logo size="lg" /></Link>
+        <div className="flex justify-center mb-5 sm:mb-7">
+          <Link to="/"><Logo size="default" /></Link>
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-white">Welcome back</h2>
-          <p className="text-white/45 mt-1 text-sm">Sign in to your Magic Mall account</p>
+        <div className="mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold">Welcome back</h2>
+          <p className="mt-1 text-sm" style={{ color: dark ? 'rgba(255,255,255,0.45)' : '#6b7280' }}>Sign in to your Magic Mall account</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           {error && (
-            <div
-              className="flex items-center gap-2 p-3 rounded-xl text-sm text-red-300"
-              style={{ background: 'rgba(220,38,38,0.15)', border: '1px solid rgba(220,38,38,0.30)' }}
-            >
+            <div className="flex items-center gap-2 p-3 rounded-xl text-sm" style={{ background: dark ? 'rgba(220,38,38,0.15)' : '#fef2f2', border: dark ? '1px solid rgba(220,38,38,0.30)' : '1px solid #fecaca', color: dark ? '#fca5a5' : '#dc2626' }}>
               <AlertCircle size={16} className="shrink-0" />
               {error}
             </div>
           )}
 
           <div className="auth-slide-up" style={{ animationDelay: '0.10s' }}>
-            <label className="block text-xs font-medium text-white/60 mb-1.5">Email</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: dark ? 'rgba(255,255,255,0.60)' : '#4b5563' }}>Email</label>
             <div className="relative">
-              <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30" />
+              <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: dark ? 'rgba(255,255,255,0.30)' : '#9ca3af' }} />
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="you@example.com"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white placeholder:text-white/25 outline-none transition-all"
-                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all"
+                style={{ background: inputBg, border: `1px solid ${inputBorder}`, color: dark ? '#ffffff' : '#111827' }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(220,38,38,0.60)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)')}
+                onBlur={(e)  => (e.currentTarget.style.borderColor = inputBorder)}
               />
             </div>
           </div>
 
           <div className="auth-slide-up" style={{ animationDelay: '0.18s' }}>
-            <label className="block text-xs font-medium text-white/60 mb-1.5">Password</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: dark ? 'rgba(255,255,255,0.60)' : '#4b5563' }}>Password</label>
             <div className="relative">
-              <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30" />
+              <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: dark ? 'rgba(255,255,255,0.30)' : '#9ca3af' }} />
               <input
                 type={show ? 'text' : 'password'}
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 placeholder="Enter your password"
-                className="w-full pl-10 pr-11 py-2.5 rounded-xl text-sm text-white placeholder:text-white/25 outline-none transition-all"
-                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}
+                className="w-full pl-10 pr-11 py-2.5 rounded-xl text-sm outline-none transition-all"
+                style={{ background: inputBg, border: `1px solid ${inputBorder}`, color: dark ? '#ffffff' : '#111827' }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(220,38,38,0.60)')}
-                onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)')}
+                onBlur={(e)  => (e.currentTarget.style.borderColor = inputBorder)}
               />
               <button
                 type="button"
                 onClick={() => setShow(!show)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
+                style={{ color: dark ? 'rgba(255,255,255,0.30)' : '#9ca3af' }}
               >
                 {show ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
@@ -185,16 +186,16 @@ export default function SignIn() {
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-5">
-          <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
-          <span className="text-xs text-white/30 uppercase tracking-wider">or</span>
-          <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
+          <div className="flex-1 h-px" style={{ background: dividerColor }} />
+          <span className="text-xs uppercase tracking-wider" style={{ color: muted }}>or</span>
+          <div className="flex-1 h-px" style={{ background: dividerColor }} />
         </div>
 
         {/* Google */}
         <button
           onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-white/70 hover:text-white transition-all hover:-translate-y-0.5"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
+          className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:-translate-y-0.5"
+          style={{ background: dark ? 'rgba(255,255,255,0.06)' : '#f9fafb', border: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.10)', color: dark ? 'rgba(255,255,255,0.70)' : '#374151' }}
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -207,23 +208,20 @@ export default function SignIn() {
 
         {/* Links */}
         <div className="flex items-center justify-between mt-6 text-sm">
-          <Link to="/signup" className="text-red-400 hover:text-red-300 font-semibold transition-colors">
+          <Link to="/signup" className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-semibold transition-colors">
             Create account
           </Link>
-          <Link to="/forgot-password" className="text-white/35 hover:text-white/70 transition-colors">
+          <Link to="/forgot-password" className="transition-colors" style={{ color: muted }}>
             Forgot password?
           </Link>
         </div>
 
         {/* Stats strip */}
-        <div
-          className="grid grid-cols-3 gap-2 mt-6 pt-5"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
-        >
+        <div className="grid grid-cols-3 gap-2 mt-6 pt-5" style={{ borderTop: `1px solid ${dividerColor}` }}>
           {stats.map((s) => (
             <div key={s.label} className="text-center">
-              <p className="text-xs font-bold text-red-400">{s.value}</p>
-              <p className="text-[10px] text-white/30 mt-0.5">{s.label}</p>
+              <p className="text-xs font-bold" style={{ color: dark ? '#f87171' : '#dc2626' }}>{s.value}</p>
+              <p className="text-[10px] mt-0.5" style={{ color: muted }}>{s.label}</p>
             </div>
           ))}
         </div>

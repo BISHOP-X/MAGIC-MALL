@@ -127,15 +127,15 @@
 }
 .card-3d:hover {
   transform: translateY(-8px) rotateX(3deg) rotateY(-2deg);
-  box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(220, 38, 38, 0.15);
 }
 .dark .card-3d:hover {
-  box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(244, 63, 94, 0.25);
 }
 
 /* ───────────────── Gradient Text ───────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #4F46E5 100%);
+  background: linear-gradient(135deg, #dc2626 0%, #f43f5e 50%, #dc2626 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -156,7 +156,7 @@
   content: '';
   position: absolute;
   inset: -2px;
-  background: linear-gradient(135deg, #4F46E5, #7C3AED, #4F46E5);
+  background: linear-gradient(135deg, #dc2626, #f43f5e, #dc2626);
   border-radius: inherit;
   z-index: -1;
   opacity: 0;
@@ -188,7 +188,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 2px;
-  background: linear-gradient(135deg, #4F46E5, #7C3AED, #06B6D4, #4F46E5);
+  background: linear-gradient(135deg, #dc2626, #f43f5e, #fb923c, #dc2626);
   background-size: 300% 300%;
   animation: gradient-shift 5s ease infinite;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);

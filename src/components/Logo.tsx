@@ -7,17 +7,19 @@ export default function Logo({
   size?: 'sm' | 'default' | 'lg' | 'xl'
   variant?: 'full' | 'icon' | 'text'
 }) {
-  const textSizes = {
-    sm: 'text-xl',
-    default: 'text-2xl',
-    lg: 'text-3xl',
-    xl: 'text-4xl',
+  const heights: Record<string, string> = {
+    sm: 'h-7',
+    default: 'h-8',
+    lg: 'h-10',
+    xl: 'h-12',
   }
 
   return (
-    <span className={`inline-flex items-center gap-1 font-extrabold tracking-tight ${textSizes[size]} ${className}`}>
-      <span className="bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">Magic</span>
-      <span className="text-gray-900 dark:text-white">Mall</span>
-    </span>
+    <img
+      src="/MAGICMALL-LOGO.png"
+      alt="Magic Mall"
+      className={`${heights[size]} w-auto object-contain select-none ${className}`}
+      draggable={false}
+    />
   )
 }

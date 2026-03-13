@@ -60,6 +60,9 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
+      screens: {
+        xs: '420px',
+      },
     }
   },
   plugins: [require("tailwindcss-animate")],

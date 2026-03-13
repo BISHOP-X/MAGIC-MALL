@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, CheckCircle, ShoppingBag, Users, Shield, Zap } from 'lucide-react'
+import { ArrowRight, CheckCircle, ShoppingBag, Users, Shield, Zap, Sun, Moon } from 'lucide-react'
 import Logo from '@/components/Logo'
+import { useTheme } from '@/hooks/useTheme'
 
 /* ─── Platform SVG Icons ─── */
 const FacebookIcon = ({ className = 'w-10 h-10' }: { className?: string }) => (
@@ -60,95 +61,83 @@ const VpnIcon = ({ className = 'w-10 h-10' }: { className?: string }) => (
 type Category = { name: string; Icon: React.FC<{ className?: string }>; count: string; iconBg: string }
 
 const categories: Category[] = [
-  { name: 'Facebook', Icon: FacebookIcon, count: '500+ accounts', iconBg: 'rgba(24,119,242,0.15)' },
-  { name: 'Instagram', Icon: InstagramIcon, count: '300+ accounts', iconBg: 'rgba(214,41,118,0.15)' },
-  { name: 'Twitter / X', Icon: TwitterIcon, count: '200+ accounts', iconBg: 'rgba(255,255,255,0.08)' },
-  { name: 'Gmail', Icon: GmailIcon, count: '400+ accounts', iconBg: 'rgba(234,67,53,0.15)' },
-  { name: 'TikTok', Icon: TikTokIcon, count: '150+ accounts', iconBg: 'rgba(254,44,85,0.12)' },
-  { name: 'VPN & Tools', Icon: VpnIcon, count: '50+ tools', iconBg: 'rgba(99,102,241,0.15)' },
+  { name: 'Facebook',   Icon: FacebookIcon,  count: '500+ accounts', iconBg: 'rgba(24,119,242,0.15)' },
+  { name: 'Instagram',  Icon: InstagramIcon, count: '300+ accounts', iconBg: 'rgba(214,41,118,0.15)' },
+  { name: 'Twitter / X', Icon: TwitterIcon,  count: '200+ accounts', iconBg: 'rgba(0,0,0,0.08)' },
+  { name: 'Gmail',      Icon: GmailIcon,     count: '400+ accounts', iconBg: 'rgba(234,67,53,0.15)' },
+  { name: 'TikTok',     Icon: TikTokIcon,    count: '150+ accounts', iconBg: 'rgba(254,44,85,0.12)' },
+  { name: 'VPN & Tools', Icon: VpnIcon,      count: '50+ tools',     iconBg: 'rgba(99,102,241,0.15)' },
 ]
 
 const features = [
-  { icon: Shield, title: 'Verified Accounts', desc: 'Every account is tested and verified before listing.' },
-  { icon: Zap, title: 'Instant Delivery', desc: 'Credentials delivered instantly after payment confirmation.' },
-  { icon: Users, title: '10,000+ Customers', desc: 'Trusted by thousands of happy buyers worldwide.' },
-  { icon: ShoppingBag, title: 'Wide Selection', desc: 'Hundreds of digital accounts across dozens of platforms.' },
+  { icon: Shield,      title: 'Verified Accounts', desc: 'Every account is tested and verified before listing.' },
+  { icon: Zap,         title: 'Instant Delivery',  desc: 'Credentials delivered instantly after payment confirmation.' },
+  { icon: Users,       title: '10,000+ Customers', desc: 'Trusted by thousands of happy buyers worldwide.' },
+  { icon: ShoppingBag, title: 'Wide Selection',    desc: 'Hundreds of digital accounts across dozens of platforms.' },
 ]
 
-const glassCard = {
-  background: 'rgba(255,255,255,0.07)',
-  backdropFilter: 'blur(16px)',
-  WebkitBackdropFilter: 'blur(16px)',
-  border: '1px solid rgba(255,255,255,0.13)',
-  borderRadius: '1rem',
-}
-
-const glassCardDark = {
-  background: 'rgba(255,255,255,0.05)',
-  backdropFilter: 'blur(20px)',
-  WebkitBackdropFilter: 'blur(20px)',
-  border: '1px solid rgba(255,255,255,0.10)',
-  borderRadius: '1rem',
-}
-
 export default function LandingPage() {
+  const { dark, toggle } = useTheme()
+
+  /* ─── Theme-conditional styles ─── */
+  const pageBg = dark
+    ? 'radial-gradient(ellipse at 20% 10%, rgba(220,38,38,0.25) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.20) 0%, transparent 55%), #0d0d14'
+    : 'radial-gradient(ellipse at 20% 10%, rgba(220,38,38,0.08) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.06) 0%, transparent 55%), #fafafa'
+
+  const navStyle = dark
+    ? { background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.10)' }
+    : { background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 2px 20px -4px rgba(0,0,0,0.06)' }
+
+  const badgeStyle = dark
+    ? { background: 'rgba(220,38,38,0.15)', border: '1px solid rgba(220,38,38,0.30)', color: '#fca5a5' }
+    : { background: 'rgba(220,38,38,0.07)', border: '1px solid rgba(220,38,38,0.20)', color: '#dc2626' }
+
+  const secondaryBtnStyle = dark
+    ? { background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.80)' }
+    : { background: 'rgba(0,0,0,0.04)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(0,0,0,0.10)', color: '#374151' }
+
+  const cardStyle = dark
+    ? { background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.13)', borderRadius: '1rem' }
+    : { background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '1rem', boxShadow: '0 2px 16px -4px rgba(0,0,0,0.08)' }
+
+  const featureCardStyle = dark
+    ? { background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '1rem' }
+    : { background: '#ffffff', border: '1px solid rgba(0,0,0,0.07)', borderRadius: '1rem', boxShadow: '0 4px 20px -6px rgba(0,0,0,0.10)' }
+
+  const ctaStyle = dark
+    ? { background: 'linear-gradient(135deg, rgba(220,38,38,0.18) 0%, rgba(244,63,94,0.12) 100%)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(220,38,38,0.25)' }
+    : { background: 'linear-gradient(135deg, rgba(220,38,38,0.05) 0%, rgba(244,63,94,0.04) 100%)', border: '1px solid rgba(220,38,38,0.18)' }
+
+  const muted = dark ? 'rgba(255,255,255,0.50)' : '#6b7280'
+
   return (
     <div
-      className="min-h-screen text-white relative overflow-x-hidden"
-      style={{
-        background: 'radial-gradient(ellipse at 20% 10%, rgba(220,38,38,0.25) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.20) 0%, transparent 55%), #0d0d14',
-      }}
+      className="min-h-screen relative overflow-x-hidden transition-colors duration-300"
+      style={{ background: pageBg, color: dark ? '#ffffff' : '#111827' }}
     >
       {/* Decorative blobs */}
-      <div
-        className="fixed pointer-events-none"
-        style={{
-          top: '-120px', left: '-120px', width: '480px', height: '480px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(220,38,38,0.18) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-          zIndex: 0,
-        }}
-      />
-      <div
-        className="fixed pointer-events-none"
-        style={{
-          bottom: '-100px', right: '-100px', width: '400px', height: '400px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(244,63,94,0.15) 0%, transparent 70%)',
-          filter: 'blur(50px)',
-          zIndex: 0,
-        }}
-      />
+      <div className="fixed pointer-events-none" style={{ top: '-120px', left: '-120px', width: '480px', height: '480px', borderRadius: '50%', background: `radial-gradient(circle, ${dark ? 'rgba(220,38,38,0.18)' : 'rgba(220,38,38,0.06)'} 0%, transparent 70%)`, filter: 'blur(60px)', zIndex: 0 }} />
+      <div className="fixed pointer-events-none" style={{ bottom: '-100px', right: '-100px', width: '400px', height: '400px', borderRadius: '50%', background: `radial-gradient(circle, ${dark ? 'rgba(244,63,94,0.15)' : 'rgba(244,63,94,0.05)'} 0%, transparent 70%)`, filter: 'blur(50px)', zIndex: 0 }} />
 
       {/* Navbar */}
-      <nav
-        className="relative z-10 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 mx-3 sm:mx-8 mt-3 sm:mt-4 rounded-2xl"
-        style={{
-          background: 'rgba(255,255,255,0.06)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255,255,255,0.10)',
-        }}
-      >
+      <nav className="relative z-10 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 mx-3 sm:mx-8 mt-3 sm:mt-4 rounded-2xl" style={navStyle}>
         <Logo size="default" />
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            to="/signin"
-            className="hidden sm:block px-4 py-2 rounded-xl text-sm font-medium text-white/80 hover:text-white transition-colors"
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="p-2 rounded-xl transition-all duration-300 hover:rotate-12"
+            style={{ color: dark ? 'rgba(255,255,255,0.55)' : '#6b7280', background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)' }}
           >
+            <span className="theme-icon">{dark ? <Sun size={16} /> : <Moon size={16} />}</span>
+          </button>
+          <Link to="/signin" className="hidden sm:block px-4 py-2 rounded-xl text-sm font-medium transition-colors" style={{ color: dark ? 'rgba(255,255,255,0.80)' : '#374151' }}>
             Sign In
           </Link>
-          <Link
-            to="/signin"
-            className="sm:hidden px-3 py-2 rounded-xl text-sm font-medium text-white/70 hover:text-white transition-colors"
-          >
+          <Link to="/signin" className="sm:hidden px-3 py-2 rounded-xl text-sm font-medium transition-colors" style={{ color: dark ? 'rgba(255,255,255,0.70)' : '#374151' }}>
             Login
           </Link>
-          <Link
-            to="/signup"
-            className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 shadow-lg shadow-red-500/30 hover:shadow-red-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-          >
+          <Link to="/signup" className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 shadow-lg shadow-red-500/30 hover:shadow-red-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
             <span className="hidden sm:inline">Get Started</span>
             <span className="sm:hidden">Sign Up</span>
             <ArrowRight size={14} />
@@ -158,63 +147,33 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative z-10 text-center px-4 pt-14 pb-12 sm:pt-28 sm:pb-24 max-w-4xl mx-auto">
-        <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-5 sm:mb-6"
-          style={{
-            background: 'rgba(220,38,38,0.15)',
-            border: '1px solid rgba(220,38,38,0.30)',
-            color: '#fca5a5',
-          }}
-        >
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-5 sm:mb-6" style={badgeStyle}>
           <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
           Premium Digital Accounts Marketplace
         </div>
 
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold mb-5 sm:mb-6 leading-tight">
           Buy Premium
-          <span
-            className="block"
-            style={{
-              background: 'linear-gradient(135deg, #ef4444 0%, #fb7185 50%, #f43f5e 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              textShadow: 'none',
-            }}
-          >
+          <span className="block" style={{ background: 'linear-gradient(135deg, #ef4444 0%, #fb7185 50%, #f43f5e 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
             Digital Accounts
           </span>
-          <span className="text-white/90">Instantly</span>
+          <span style={{ color: dark ? 'rgba(255,255,255,0.90)' : '#111827' }}>Instantly</span>
         </h1>
 
-        <p className="text-base sm:text-xl text-white/60 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-2 sm:px-0">
+        <p className="text-base sm:text-xl mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-2 sm:px-0" style={{ color: muted }}>
           Access verified social media accounts, emails, and digital tools. Secure checkout, instant delivery, and 24/7 support.
         </p>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 px-2 sm:px-0">
-          <Link
-            to="/signup"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 shadow-xl shadow-red-500/30 hover:shadow-red-500/50 hover:scale-[1.03] active:scale-[0.97] transition-all duration-200"
-          >
-            Create Free Account
-            <ArrowRight size={18} />
+          <Link to="/signup" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 shadow-xl shadow-red-500/30 hover:shadow-red-500/50 hover:scale-[1.03] active:scale-[0.97] transition-all duration-200">
+            Create Free Account <ArrowRight size={18} />
           </Link>
-          <Link
-            to="/signin"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-medium text-white/80 hover:text-white transition-colors"
-            style={{
-              background: 'rgba(255,255,255,0.07)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.12)',
-            }}
-          >
+          <Link to="/signin" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-medium transition-colors" style={secondaryBtnStyle}>
             Sign In
           </Link>
         </div>
 
-        {/* Trust badges */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 text-xs sm:text-sm text-white/50">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 text-xs sm:text-sm" style={{ color: dark ? 'rgba(255,255,255,0.45)' : '#9ca3af' }}>
           {['Instant Delivery', 'Verified Accounts', 'Secure Payments', '24/7 Support'].map(badge => (
             <span key={badge} className="flex items-center gap-1.5">
               <CheckCircle size={14} className="text-red-400" />
@@ -227,23 +186,15 @@ export default function LandingPage() {
       {/* Categories */}
       <section className="relative z-10 px-4 py-12 sm:py-16 max-w-6xl mx-auto">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-3">Browse Categories</h2>
-        <p className="text-white/50 text-center mb-8 sm:mb-10 text-sm sm:text-base">Hundreds of accounts across popular platforms</p>
-        <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+        <p className="text-center mb-8 sm:mb-10 text-sm sm:text-base" style={{ color: muted }}>Hundreds of accounts across popular platforms</p>
+        <div className="grid grid-cols-2 min-[500px]:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {categories.map(cat => (
-            <Link
-              to="/signup"
-              key={cat.name}
-              className="flex flex-col items-center gap-2.5 p-3 sm:p-5 text-center hover:scale-[1.04] active:scale-[0.97] transition-all duration-200 group"
-              style={glassCard}
-            >
-              <div
-                className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110"
-                style={{ background: cat.iconBg }}
-              >
+            <Link to="/signup" key={cat.name} className="flex flex-col items-center gap-2.5 p-3 sm:p-5 text-center hover:scale-[1.04] active:scale-[0.97] transition-all duration-200 group" style={cardStyle}>
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110" style={{ background: cat.iconBg }}>
                 <cat.Icon className="w-8 h-8 sm:w-9 sm:h-9" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-white/90 leading-tight group-hover:text-white transition-colors">{cat.name}</span>
-              <span className="text-[10px] sm:text-xs text-red-400 font-medium">{cat.count}</span>
+              <span className="text-xs sm:text-sm font-semibold leading-tight" style={{ color: dark ? 'rgba(255,255,255,0.90)' : '#1f2937' }}>{cat.name}</span>
+              <span className="text-[10px] sm:text-xs font-medium" style={{ color: dark ? '#f87171' : '#dc2626' }}>{cat.count}</span>
             </Link>
           ))}
         </div>
@@ -252,18 +203,15 @@ export default function LandingPage() {
       {/* Features */}
       <section className="relative z-10 px-4 py-12 sm:py-16 max-w-5xl mx-auto">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-3">Why Magic Mall?</h2>
-        <p className="text-white/50 text-center mb-8 sm:mb-10 text-sm sm:text-base">Built for speed, security, and reliability</p>
+        <p className="text-center mb-8 sm:mb-10 text-sm sm:text-base" style={{ color: muted }}>Built for speed, security, and reliability</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {features.map(f => (
-            <div key={f.title} className="p-5 sm:p-6" style={glassCardDark}>
-              <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                style={{ background: 'linear-gradient(135deg, rgba(220,38,38,0.30), rgba(244,63,94,0.20))' }}
-              >
+            <div key={f.title} className="p-5 sm:p-6" style={featureCardStyle}>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, rgba(220,38,38,0.30), rgba(244,63,94,0.20))' }}>
                 <f.icon size={22} className="text-red-400" />
               </div>
-              <h3 className="font-semibold text-white mb-1.5">{f.title}</h3>
-              <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
+              <h3 className="font-semibold mb-1.5" style={{ color: dark ? '#ffffff' : '#111827' }}>{f.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: muted }}>{f.desc}</p>
             </div>
           ))}
         </div>
@@ -271,34 +219,22 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="relative z-10 px-4 py-12 sm:py-20 max-w-3xl mx-auto text-center">
-        <div
-          className="p-6 sm:p-10 rounded-2xl"
-          style={{
-            background: 'linear-gradient(135deg, rgba(220,38,38,0.18) 0%, rgba(244,63,94,0.12) 100%)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(220,38,38,0.25)',
-          }}
-        >
+        <div className="p-6 sm:p-10 rounded-2xl" style={ctaStyle}>
           <h2 className="text-2xl sm:text-3xl font-bold mb-3">Ready to get started?</h2>
-          <p className="text-white/60 mb-8">
+          <p className="mb-8" style={{ color: muted }}>
             Create a free account and start browsing premium digital accounts today.
           </p>
-          <Link
-            to="/signup"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 shadow-xl shadow-red-500/30 hover:shadow-red-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-          >
-            Create Free Account
-            <ArrowRight size={18} />
+          <Link to="/signup" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-red-600 to-rose-600 shadow-xl shadow-red-500/30 hover:shadow-red-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+            Create Free Account <ArrowRight size={18} />
           </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 py-8 mt-4">
+      <footer className="relative z-10 py-8 mt-4" style={{ borderTop: `1px solid ${dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)'}` }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <Logo size="sm" />
-          <p className="text-sm text-white/40">
+          <p className="text-sm" style={{ color: dark ? 'rgba(255,255,255,0.40)' : '#9ca3af' }}>
             &copy; {new Date().getFullYear()} Magic Mall. All rights reserved.
           </p>
         </div>

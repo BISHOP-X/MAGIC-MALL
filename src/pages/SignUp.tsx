@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, CheckCircle2, ArrowLeft, AlertCircle } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, CheckCircle2, ArrowLeft, AlertCircle, Sun, Moon } from 'lucide-react'
 import Logo from '../components/Logo'
 import { useAuth } from '../hooks/useAuth'
+import { useTheme } from '../hooks/useTheme'
 
 const benefits = [
   'Access 30,000+ verified social media accounts',
@@ -19,6 +20,7 @@ export default function SignUp() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const { signUp, signInWithGoogle } = useAuth()
+  const { dark, toggle } = useTheme()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -54,55 +56,72 @@ export default function SignUp() {
     if (oauthError) setError(oauthError.message)
   }
 
-  const inputStyle = {
-    background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(255,255,255,0.10)',
-  }
+  /* ─── Theme-conditional values ─── */
+  const inputBg     = dark ? 'rgba(255,255,255,0.06)' : '#ffffff'
+  const inputBorder = dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.15)'
+  const dividerColor = dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)'
+  const muted        = dark ? 'rgba(255,255,255,0.25)' : '#9ca3af'
+
+  const inputStyle = { background: inputBg, border: `1px solid ${inputBorder}` }
   const focusBorder = (e: React.FocusEvent<HTMLInputElement>) =>
     (e.currentTarget.style.borderColor = 'rgba(220,38,38,0.55)')
   const blurBorder = (e: React.FocusEvent<HTMLInputElement>) =>
-    (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)')
+    (e.currentTarget.style.borderColor = inputBorder)
 
   return (
-    <div className="min-h-screen flex text-white" style={{ background: '#0d0d14' }}>
-      {/* Back button */}
+    <div
+      className="min-h-screen flex transition-colors duration-300"
+      style={{ background: dark ? '#0d0d14' : '#f5f5f8', color: dark ? '#ffffff' : '#111827' }}
+    >
+      {/* Back button — light style on mobile (right panel), dark style on desktop (overlays left panel) */}
       <Link
         to="/"
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium text-white/70 hover:text-white transition-all"
+        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all"
         style={{
-          background: 'rgba(255,255,255,0.08)',
+          background: dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.06)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          border: dark ? '1px solid rgba(255,255,255,0.18)' : '1px solid rgba(0,0,0,0.10)',
+          color: dark ? 'rgba(255,255,255,0.80)' : '#374151',
+          boxShadow: dark ? 'none' : '0 2px 8px rgba(0,0,0,0.08)',
         }}
       >
         <ArrowLeft size={15} />
         <span className="hidden sm:inline">Home</span>
       </Link>
 
-      {/* ── Left panel: branding ── */}
+      {/* Theme toggle — top-right — adapts to right panel theme */}
+      <button
+        onClick={toggle}
+        aria-label="Toggle theme"
+        className="fixed top-4 right-4 z-50 p-2.5 rounded-full transition-all duration-300 hover:rotate-12"
+        style={{
+          background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: dark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.10)',
+          color: dark ? 'rgba(255,255,255,0.60)' : '#6b7280',
+          boxShadow: dark ? 'none' : '0 2px 8px rgba(0,0,0,0.08)',
+        }}
+      >
+        <span className="theme-icon">{dark ? <Sun size={16} /> : <Moon size={16} />}</span>
+      </button>
+
+      {/* ── Left panel: branding (always dark — brand identity) ── */}
       <div
         className="hidden lg:flex lg:w-5/12 xl:w-[44%] relative overflow-hidden flex-col"
         style={{
-          background:
-            'radial-gradient(ellipse at 30% 20%, rgba(220,38,38,0.28) 0%, transparent 60%), radial-gradient(ellipse at 80% 88%, rgba(244,63,94,0.20) 0%, transparent 55%), #10080a',
+          background: 'radial-gradient(ellipse at 30% 20%, rgba(220,38,38,0.28) 0%, transparent 60%), radial-gradient(ellipse at 80% 88%, rgba(244,63,94,0.20) 0%, transparent 55%), #10080a',
         }}
       >
         {/* Subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
-            backgroundSize: '44px 44px',
-          }}
-        />
+        <div className="absolute inset-0 opacity-[0.035]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
         {/* Floating shapes */}
         <div className="absolute top-20 left-14 w-28 h-28 rounded-full animate-float-slow" style={{ background: 'rgba(220,38,38,0.10)', filter: 'blur(1px)' }} />
         <div className="absolute bottom-32 right-10 w-20 h-20 rounded-full animate-float-delayed" style={{ background: 'rgba(244,63,94,0.08)' }} />
         <div className="absolute top-1/2 left-6 w-12 h-12 rounded-xl rotate-45 animate-float-slow" style={{ background: 'rgba(220,38,38,0.07)', animationDelay: '1.5s' }} />
 
-        <div className="relative z-10 flex flex-col justify-between p-10 xl:p-14 h-full">
+        <div className="relative z-10 flex flex-col justify-between p-10 xl:p-14 h-full text-white">
           {/* Logo */}
           <div className="auth-fade-in">
             <Link to="/"><Logo size="lg" /></Link>
@@ -112,24 +131,13 @@ export default function SignUp() {
           <div className="auth-slide-up" style={{ animationDelay: '0.25s' }}>
             <h1 className="text-3xl xl:text-4xl font-bold leading-tight mb-6">
               Your gateway to<br />
-              <span
-                style={{
-                  background: 'linear-gradient(135deg, #ef4444 0%, #fb7185 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
+              <span style={{ background: 'linear-gradient(135deg, #ef4444 0%, #fb7185 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 premium accounts
               </span>
             </h1>
             <ul className="space-y-3">
               {benefits.map((b, i) => (
-                <li
-                  key={b}
-                  className="flex items-center gap-3 text-white/75 auth-slide-up"
-                  style={{ animationDelay: `${0.40 + i * 0.10}s` }}
-                >
+                <li key={b} className="flex items-center gap-3 auth-slide-up" style={{ animationDelay: `${0.40 + i * 0.10}s`, color: 'rgba(255,255,255,0.75)' }}>
                   <CheckCircle2 size={17} className="text-red-400 shrink-0" />
                   <span className="text-sm">{b}</span>
                 </li>
@@ -139,19 +147,16 @@ export default function SignUp() {
 
           {/* Testimonial */}
           <div className="glass-auth rounded-2xl p-5 auth-slide-up" style={{ animationDelay: '0.85s' }}>
-            <p className="text-sm text-white/75 italic leading-relaxed">
+            <p className="text-sm italic leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
               "Magic Mall is the go-to place for premium digital accounts. Fast, reliable, and the support team is outstanding."
             </p>
             <div className="flex items-center gap-3 mt-4">
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold"
-                style={{ background: 'linear-gradient(135deg, #dc2626, #f43f5e)' }}
-              >
+              <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, #dc2626, #f43f5e)' }}>
                 CK
               </div>
               <div>
                 <p className="text-sm font-semibold">Chidi Kamara</p>
-                <p className="text-xs text-white/35">Social Media Manager</p>
+                <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>Social Media Manager</p>
               </div>
             </div>
           </div>
@@ -160,8 +165,8 @@ export default function SignUp() {
 
       {/* ── Right panel: form ── */}
       <div
-        className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-10"
-        style={{ background: 'rgba(255,255,255,0.015)' }}
+        className="flex-1 flex items-start sm:items-center justify-center px-4 pt-20 pb-10 sm:py-8 sm:px-6 lg:p-10 overflow-y-auto transition-colors duration-300"
+        style={{ background: dark ? 'rgba(255,255,255,0.015)' : '#fafafa' }}
       >
         <div className="w-full max-w-md">
           {/* Mobile logo */}
@@ -170,17 +175,14 @@ export default function SignUp() {
           </div>
 
           <div className="auth-slide-up mb-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-white">Create an account</h2>
-            <p className="text-white/40 mt-1 text-sm">Get started in less than a minute</p>
+            <h2 className="text-xl sm:text-2xl font-bold">Create an account</h2>
+            <p className="mt-1 text-sm" style={{ color: dark ? 'rgba(255,255,255,0.40)' : '#6b7280' }}>Get started in less than a minute</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3.5">
             {error && (
-              <div
-                className="flex items-center gap-2 p-3 rounded-xl text-sm text-red-300"
-                style={{ background: 'rgba(220,38,38,0.15)', border: '1px solid rgba(220,38,38,0.30)' }}
-              >
+              <div className="flex items-center gap-2 p-3 rounded-xl text-sm" style={{ background: dark ? 'rgba(220,38,38,0.15)' : '#fef2f2', border: dark ? '1px solid rgba(220,38,38,0.30)' : '1px solid #fecaca', color: dark ? '#fca5a5' : '#dc2626' }}>
                 <AlertCircle size={16} className="shrink-0" />
                 {error}
               </div>
@@ -188,16 +190,16 @@ export default function SignUp() {
 
             {/* Username */}
             <div className="auth-slide-up" style={{ animationDelay: '0.10s' }}>
-              <label className="block text-xs font-medium text-white/55 mb-1.5">Username</label>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: dark ? 'rgba(255,255,255,0.55)' : '#4b5563' }}>Username</label>
               <div className="relative">
-                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: muted }} />
                 <input
                   type="text"
                   value={form.username}
                   onChange={(e) => setForm({ ...form, username: e.target.value })}
                   placeholder="Choose a username"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white placeholder:text-white/20 outline-none transition-all"
-                  style={inputStyle}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all"
+                  style={{ ...inputStyle, color: dark ? '#ffffff' : '#111827' }}
                   onFocus={focusBorder}
                   onBlur={blurBorder}
                 />
@@ -206,16 +208,16 @@ export default function SignUp() {
 
             {/* Email */}
             <div className="auth-slide-up" style={{ animationDelay: '0.17s' }}>
-              <label className="block text-xs font-medium text-white/55 mb-1.5">Email Address</label>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: dark ? 'rgba(255,255,255,0.55)' : '#4b5563' }}>Email Address</label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: muted }} />
                 <input
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="you@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white placeholder:text-white/20 outline-none transition-all"
-                  style={inputStyle}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all"
+                  style={{ ...inputStyle, color: dark ? '#ffffff' : '#111827' }}
                   onFocus={focusBorder}
                   onBlur={blurBorder}
                 />
@@ -224,20 +226,20 @@ export default function SignUp() {
 
             {/* Password */}
             <div className="auth-slide-up" style={{ animationDelay: '0.24s' }}>
-              <label className="block text-xs font-medium text-white/55 mb-1.5">Password</label>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: dark ? 'rgba(255,255,255,0.55)' : '#4b5563' }}>Password</label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: muted }} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   placeholder="Min 6 characters"
-                  className="w-full pl-10 pr-11 py-2.5 rounded-xl text-sm text-white placeholder:text-white/20 outline-none transition-all"
-                  style={inputStyle}
+                  className="w-full pl-10 pr-11 py-2.5 rounded-xl text-sm outline-none transition-all"
+                  style={{ ...inputStyle, color: dark ? '#ffffff' : '#111827' }}
                   onFocus={focusBorder}
                   onBlur={blurBorder}
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors" style={{ color: muted }}>
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
@@ -245,20 +247,20 @@ export default function SignUp() {
 
             {/* Confirm password */}
             <div className="auth-slide-up" style={{ animationDelay: '0.31s' }}>
-              <label className="block text-xs font-medium text-white/55 mb-1.5">Confirm Password</label>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: dark ? 'rgba(255,255,255,0.55)' : '#4b5563' }}>Confirm Password</label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
+                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: muted }} />
                 <input
                   type={showConfirm ? 'text' : 'password'}
                   value={form.confirmPassword}
                   onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                   placeholder="Re-enter your password"
-                  className="w-full pl-10 pr-11 py-2.5 rounded-xl text-sm text-white placeholder:text-white/20 outline-none transition-all"
-                  style={inputStyle}
+                  className="w-full pl-10 pr-11 py-2.5 rounded-xl text-sm outline-none transition-all"
+                  style={{ ...inputStyle, color: dark ? '#ffffff' : '#111827' }}
                   onFocus={focusBorder}
                   onBlur={blurBorder}
                 />
-                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
+                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors" style={{ color: muted }}>
                   {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
@@ -280,16 +282,16 @@ export default function SignUp() {
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-4">
-            <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-            <span className="text-xs text-white/25 uppercase tracking-wider">or</span>
-            <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
+            <div className="flex-1 h-px" style={{ background: dividerColor }} />
+            <span className="text-xs uppercase tracking-wider" style={{ color: dark ? 'rgba(255,255,255,0.25)' : '#d1d5db' }}>or</span>
+            <div className="flex-1 h-px" style={{ background: dividerColor }} />
           </div>
 
           {/* Google */}
           <button
             onClick={handleGoogleSignUp}
-            className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-white/65 hover:text-white transition-all hover:-translate-y-0.5"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}
+            className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:-translate-y-0.5"
+            style={{ background: dark ? 'rgba(255,255,255,0.05)' : '#f9fafb', border: dark ? '1px solid rgba(255,255,255,0.09)' : '1px solid rgba(0,0,0,0.10)', color: dark ? 'rgba(255,255,255,0.65)' : '#374151' }}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -301,9 +303,9 @@ export default function SignUp() {
           </button>
 
           {/* Already have account */}
-          <p className="text-center mt-5 text-sm text-white/35">
+          <p className="text-center mt-5 text-sm" style={{ color: dark ? 'rgba(255,255,255,0.35)' : '#6b7280' }}>
             Already have an account?{' '}
-            <Link to="/signin" className="text-red-400 hover:text-red-300 font-semibold transition-colors">
+            <Link to="/signin" className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-semibold transition-colors">
               Sign In
             </Link>
           </p>
